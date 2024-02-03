@@ -19,7 +19,7 @@ const string SUPPORTED_MAP_TYPE         = "TM_Race";
 const string DEFAULT_MODE               = "";
 #endif
 
-const string PLUGIN_NAME                = MX_NAME + " Random Map Picker";
+const string PLUGIN_NAME                = MX_NAME + " Random Map Picker Team Survival";
 const string PLUGIN_VERSION             = Meta::ExecutingPlugin().Version;
 const array<string> PLUGIN_VERSION_SPLIT= PLUGIN_VERSION.Split(".");
 

@@ -50,3 +50,4 @@ Game modes are in a enumurated list.
 | 3          | SurvivalChaos    |
 | 4          | Objective        |
 | 5          | Together         |
+| 6          | TogetherSurvival |
