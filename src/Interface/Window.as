@@ -93,8 +93,8 @@ class Window
             }
             else
             {
-                if (!RMC::ShowTimer) RMC::RenderRMCMenu();
-                else RMC::RenderRMCTimer();
+                if (RMC::IsStarting || RMC::IsRunning) RMC::RenderRMCTimer();
+                else RMC::RenderRMCMenu();
             }
         }
         UI::End();

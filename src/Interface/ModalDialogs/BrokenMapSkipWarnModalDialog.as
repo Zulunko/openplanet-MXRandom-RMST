@@ -19,18 +19,15 @@ class BrokenMapSkipWarnModalDialog : ModalDialog
         UI::EndChild();
         if (UI::Button(Icons::Times + " No")) {
             Close();
-            RMC::EndTime = RMC::EndTime + (Time::get_Now() - RMC::StartTime);
             RMC::IsPaused = false;
         }
         UI::SameLine();
         UI::SetCursorPos(vec2(UI::GetWindowSize().x - 70 * scale, UI::GetCursorPos().y));
         if (UI::OrangeButton(Icons::PlayCircleO + " Yes")) {
             Close();
-            RMC::EndTime = RMC::EndTime + (Time::get_Now() - RMC::StartTime);
-            RMC::IsPaused = false;
-            print("RMC: Broken Map Skip");
+            Log::Trace(tostring(RMC::selectedGameMode) + ": Broken Map Skip");
             UI::ShowNotification("Please wait...");
-            RMC::EndTime += RMC::TimeSpentMap;
+            RMC::TimePaused += RMC::TimeSpentMap;
             startnew(RMC::SwitchMap);
         }
     }

@@ -125,7 +125,7 @@ namespace MXNadeoServicesGlobal
     void ClubRoomSetMapAndSwitchAsync(const NadeoServices::ClubRoom@ &in room, const string &in mapUID) {
         Json::Value bodyJson = Json::Object();
         EditRoomPayloadSetMaps(bodyJson, {mapUID});
-        EditRoomPayloadSetTimeout(bodyJson, 1);
+        EditRoomPayloadSetTimeout(bodyJson, 5);
         RunClubRoomRequest(room, bodyJson, "ClubRoomSetMapAndSwitch");
     }
 
@@ -166,7 +166,7 @@ namespace MXNadeoServicesGlobal
 
         Json::Value bodyJsonSettingTimeLimit = Json::Object();
         bodyJsonSettingTimeLimit["key"] = "S_TimeLimit";
-        bodyJsonSettingTimeLimit["value"] = "1";
+        bodyJsonSettingTimeLimit["value"] = "2";
         bodyJsonSettingTimeLimit["type"] = "integer";
 
         Json::Value bodyJsonSettings = Json::Array();
