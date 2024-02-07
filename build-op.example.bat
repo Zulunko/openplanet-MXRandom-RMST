@@ -8,7 +8,7 @@ SET zip="C:\Program Files\7-Zip\7z.exe"
 :: This will get the current directory name
 for %%I in (.) do SET CurrDirName=%%~nxI
 
-IF EXIST %CurrDirName%TeamSurvival.op (
-    del %CurrDirName%TeamSurvival.op
+IF EXIST %CurrDirName%.op (
+    del %CurrDirName%.op
 )
-%zip% a -mx1 -tzip %CurrDirName%TeamSurvival.op info.toml src
+%zip% a -mx1 -tzip %CurrDirName%.op info.toml src
