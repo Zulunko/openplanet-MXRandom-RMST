@@ -336,7 +336,7 @@ class RMTS : RMS {
 	}
 
 	// If BetterChat is not installed, this is a no-op.
-	private void BetterChatSendMessage(const string& message) {
+	private void BetterChatSendMessage(const string &in message) {
 #if DEPENDENCY_BETTERCHAT
 		sleep(200);
 		BetterChat::SendChatMessage(message);
