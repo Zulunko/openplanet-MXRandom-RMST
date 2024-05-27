@@ -11,32 +11,15 @@ class RMTS : RMS {
 	bool m_CurrentlyLoadingRecords = false;
 	PBTime@ playerGotGoalActualMap;
 	PBTime@ playerGotBelowGoalActualMap;
-	uint RMTTimerMapChange = 0;
 	bool isSwitchingMap = false;
 	bool pressedStopButton = false;
 	bool isFetchingNextMap = false;
 	dictionary seenMaps;
 
     //RMS
-	int TimeLimit() override { return PluginSettings::RMC_SurvivalMaxTime * 60 * 1000; }
-
 	string GetModeName() override { return "Random Map Together Survival (WIP)";}
 
     // From RMS
-	int RunEndTimestamp() override { 
-		int InitialLimit = RMC::ContinueSavedRun ? (RMC::LoadedRemainingTime - TimeLimit()) * -1 : TimeLimit();
-		int MaxTime = TimeLimit() - (Skips * 60 * 1000);
-		int BonusTime = (GoalTimerIncrease * RMC::GoalMedalCount) - OverflowAdjustmentTime;
-		int FinalTimestamp = RMC::RunStartTimestamp + InitialLimit + RMC::TimePaused + BonusTime;
-		if (FinalTimestamp > Time::Now + MaxTime) {
-			OverflowAdjustmentTime += FinalTimestamp - (Time::Now + MaxTime);
-			BonusTime = (GoalTimerIncrease * RMC::GoalMedalCount) - OverflowAdjustmentTime;
-			FinalTimestamp = RMC::RunStartTimestamp + InitialLimit + RMC::TimePaused + BonusTime;
-		} 
-		return FinalTimestamp;
-	}
-
-
 	void Render() override
 	{
 		if (UI::IsOverlayShown() || (!UI::IsOverlayShown() && PluginSettings::RMC_AlwaysShowBtns)) {
@@ -85,6 +68,13 @@ class RMTS : RMS {
 
 	void StartRMTS()
 	{
+		RMC::IsInited = false;
+		RMC::ShowTimer = true;
+		RMC::IsStarting = true;
+		RMC::ClickedOnSkip = false;
+		RMC::ContinueSavedRun = false;
+		RMC::HasCompletedCheckbox = false;
+		
 		m_mapPersonalBests = {};
 		m_playerScores = {};
 		RMC::GoalMedalCount = 0;
@@ -140,8 +130,6 @@ class RMTS : RMS {
 		// Pause until the correct map is loaded
 		while (!TM::IsMapCorrect(currentMap.TrackUID)) sleep(500);
 
-		SetServerTime();
-
 		while (GetApp().CurrentPlayground is null) yield();
 		CGamePlayground@ GamePlayground = cast<CGamePlayground>(GetApp().CurrentPlayground);
 		while (GamePlayground.GameTerminals.Length < 0) yield();
@@ -161,6 +149,10 @@ class RMTS : RMS {
 		RMC::SpawnedMapTimestamp = Time::Now;
 		isSwitchingMap = false;
 		RMC::IsStarting = false;
+
+		RMC::ResetValuesGlobal();
+		SetServerTime();
+
 		startnew(CoroutineFunc(RMTFetchNextMap));
 	}
 
