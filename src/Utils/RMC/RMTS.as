@@ -188,9 +188,9 @@ class RMTS : RMS {
 			RMC::ClickedOnSkip = false;
 		}
 
-		SetServerTime();
-
 		RMC::UnpauseRun();
+
+		SetServerTime();
 
 		// Start prefetching the next map in the background.
 		startnew(CoroutineFunc(RMTFetchNextMap));
