@@ -85,10 +85,10 @@ class RMTS : RMS {
 		RMC::ContinueSavedRun = false;
 		RMC::HasCompletedCheckbox = false;
 
-		RMTSwitchMap();
-
 		RMC::ResetValuesGlobal();
 		RMC::IsInited = true;
+
+		RMTSwitchMap();
 
 		StartTimer();
 		startnew(CoroutineFunc(UpdateRecordsLoop));
@@ -338,7 +338,7 @@ class RMTS : RMS {
 	// If BetterChat is not installed, this is a no-op.
 	private void BetterChatSendMessage(const string &in message) {
 #if DEPENDENCY_BETTERCHAT
-		sleep(200);
+		//sleep(200);
 		BetterChat::SendChatMessage(message);
 #endif
 	}
@@ -346,7 +346,7 @@ class RMTS : RMS {
 	// If BetterChat is not installed, this is a no-op.
 	private void BetterChatSendLeaderboard() {
 #if DEPENDENCY_BETTERCHAT
-		sleep(200);
+		//sleep(200);
 		if (m_playerScores.Length > 0) {
 			string currentStatsChat = Icons::Users + " " + GetModeNameShort() + " Leaderboard: " + tostring(RMC::GoalMedalCount) + " " + tostring(PluginSettings::RMC_GoalMedal) + " medals" + (PluginSettings::RMC_GoalMedal != RMC::Medals[0] ? " - " + BelowMedalCount + " " + RMC::Medals[RMC::Medals.Find(PluginSettings::RMC_GoalMedal)-1] + " medals" : "") + "\n\n";
 			for (uint i = 0; i < m_playerScores.Length; i++) {
