@@ -234,6 +234,7 @@ class RMTS : RMS {
 			while (!TM::IsMapCorrect(LobbyMapUID)) sleep(500);
 			UserEndedRun = false;
 		}
+		ResetValues();
 		MXNadeoServicesGlobal::ClubRoomSetCountdownTimer(RMTRoom, 0);
 	}
 
@@ -247,8 +248,7 @@ class RMTS : RMS {
 					if (currentMapInfo !is null) {
 						RMC::TimePlayed = Time::Now - RMC::RunStartTimestamp - RMC::TimePaused;
 						RMC::TimeSpentMap = Time::Now - RMC::SpawnedMapTimestamp;
-
-						if (Time::Now > RMC::RunEndTimestamp() || !RMC::IsRunning || RunRemainingTime() < 1) {
+						if (!RMC::IsRunning || RunRemainingTime() < 1) {
 							RMC::IsRunning = false;
 							RMC::ContinueSavedRun = false;
 							GameEndNotification();
