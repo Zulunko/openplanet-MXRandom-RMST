@@ -12,12 +12,13 @@ class RMS : RMC
 	int TimeLimit() override { return PluginSettings::RMC_SurvivalMaxTime * 60 * 1000; }
 
 	int RunEndTimestamp() override { 
-		int InitialLimit = RMC::ContinueSavedRun ? (RMC::LoadedRemainingTime - TimeLimit()) * -1 : TimeLimit();
+		int InitialLimit = RMC::ContinueSavedRun ? TimeLimit() - RMC::LoadedRemainingTime : TimeLimit();
 		int MaxTime = TimeLimit() - (Skips * 60 * 1000);
 		int BonusTime = (GoalTimerIncrease * RMC::GoalMedalCount) - OverflowAdjustmentTime;
 		int FinalTimestamp = RMC::RunStartTimestamp + InitialLimit + RMC::TimePaused + BonusTime;
-		if (FinalTimestamp > Time::Now + MaxTime) {
-			OverflowAdjustmentTime += FinalTimestamp - (Time::Now + MaxTime);
+		int OverflowTime = Time::Now + MaxTime;
+		if (FinalTimestamp > OverflowTime) {
+			OverflowAdjustmentTime += FinalTimestamp - OverflowTime;
 			BonusTime = (GoalTimerIncrease * RMC::GoalMedalCount) - OverflowAdjustmentTime;
 			FinalTimestamp = RMC::RunStartTimestamp + InitialLimit + RMC::TimePaused + BonusTime;
 		} 
@@ -83,14 +84,16 @@ class RMS : RMC
 		UI::BeginDisabled(TM::IsPauseMenuDisplayed() || RMC::ClickedOnSkip);
 		if (UI::Button(Icons::PlayCircleO + " Skip")) {
 			RMC::PauseRun();
+			RMC::ClickedOnSkip = true;
 			Skips += 1;
 			Log::Trace(GetModeNameShort()+": Skipping map");
 			UI::ShowNotification("Please wait...");
 			startnew(RMC::SwitchMap);
 		}
+
 		if (UI::OrangeButton(Icons::PlayCircleO + " Skip Broken Map")) {
-			if (!UI::IsOverlayShown()) UI::ShowOverlay();
 			RMC::PauseRun();
+			if (!UI::IsOverlayShown()) UI::ShowOverlay();
 			Renderables::Add(BrokenMapSkipWarnModalDialog());
 		}
 
@@ -98,35 +101,16 @@ class RMS : RMC
 		UI::EndDisabled();
 	}
 
-	void NextMapButton() override {
-		if(UI::GreenButton(Icons::Play + " Next map")) {
-			if (RMC::IsPaused) RMC::IsPaused = false; // TODO this seems wrong
-			Log::Trace(GetModeNameShort()+": Skipping map");
-			UI::ShowNotification("Please wait...");
-			startnew(RMC::SwitchMap);
-		}
-	}
-
-	void StartTimer() override	{
-		// reset all values
-		ResetValues();
-		// restore time from savefile
-		if (RMC::ContinueSavedRun) LoadSavedState();
-
-		RMC::IsPaused = false;
-		RMC::IsRunning = true;
-		
-		// Is this check needed?
-		if (RMC::GotGoalMedalOnCurrentMap) GotGoalMedalNotification();
-		startnew(CoroutineFunc(TimerYield));
-	}
-
-	void ResetValues() {
+	void ResetValues() override {
+		RMC::ResetValues();
 		Skips = 0;
 		LoadedSurvivedTime = 0;
+		OverflowAdjustmentTime = 0;
 	}
 
 	void LoadSavedState() override {
+		RMC::LoadSavedState();
+		// TODO(80Ltrumpet): These are completely wrong (see `RMC::LoadSavedState`).
 		Skips = RMC::CurrentRunData["SecondaryCounterValue"];
 		LoadedSurvivedTime = RMC::CurrentRunData["CurrentRunTime"];
 	}

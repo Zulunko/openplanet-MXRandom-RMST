@@ -111,7 +111,7 @@ class RMC {
 		if (UI::RedButton(Icons::Times + " Stop " + GetModeNameShort())) {
 			UserEndedRun = true;
 			RMC::StartTimeCopyForSaveData = RMC::RunStartTimestamp;
-			RMC::EndTimeCopyForSaveData = RMC::RunEndTimestamp();
+			RMC::EndTimeCopyForSaveData = RunEndTimestamp();
 			RMC::IsRunning = false;
 			@MX::preloadedMap = null;
 
@@ -371,6 +371,7 @@ class RMC {
 	void ResetValues() {
 		BelowMedalCount = 0;
 		FreeSkipsUsed = 0;
+		UserEndedRun = false;
 	}
 
 	void LoadSavedState () {

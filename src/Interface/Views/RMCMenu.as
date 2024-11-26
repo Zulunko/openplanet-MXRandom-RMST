@@ -161,7 +161,7 @@ namespace RMC
 				}
 				if (RMT_isServerOK && TM::IsInServer() && UI::GreenButton(Icons::Heart + " Start RMT Survival")){
 					selectedGameMode = GameMode::TogetherSurvival;
-					startnew(CoroutineFunc(TogetherSurvival.StartRMT));
+					startnew(CoroutineFunc(TogetherSurvival.StartRMTS));
 				}
 #endif
 				UI::TreePop();

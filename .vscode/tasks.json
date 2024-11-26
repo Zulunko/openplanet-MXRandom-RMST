@@ -10,10 +10,7 @@
             "problemMatcher": [
                 "$Openplanet Remote Build Problem Matcher: Angelscript Compiler"
             ],
-            "group": {
-                "kind": "build",
-                "isDefault": true
-            }
+            "group": "build"
         },
         {
             "type": "Openplanet Remote Build",
@@ -23,6 +20,19 @@
                 "$Openplanet Remote Build Problem Matcher: Angelscript Compiler"
             ],
             "label": "Openplanet Remote Build: Load/Reload from User Folder"
+        },
+        {
+            "type": "Openplanet Remote Build",
+            "pluginId": "Random_Map_Together_Survival",
+            "openplanetPort": 30000,
+            "problemMatcher": [
+                "$Openplanet Remote Build Problem Matcher: Angelscript Compiler"
+            ],
+            "label": "Openplanet Remote Build: Load/Reload from User Folder",
+            "group": {
+                "kind": "build",
+                "isDefault": true
+            }
         }
     ]
 }
